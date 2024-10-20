@@ -1,0 +1,17 @@
+name: AncyCombat
+version: 0.1.0
+main: com.nayechan.combat.AncyCombat
+description: Ancy Combat Test
+author: nayechan
+website: https://nayechan.com
+api-version: '1.21'
+commands:
+  reducemana:
+    description: Test command to reduce mana
+    usage: /<command> <player> <amount>
+  addcombatlv:
+    description: Test command to add level
+    usage: /<command> <player> <amount>
+  stat:
+    description: Distribute stat
+    usage: /<command> <stat_type> <amount>

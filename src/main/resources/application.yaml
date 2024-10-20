@@ -1,0 +1,10 @@
+ebean:
+  datasource:
+    db:
+      url: jdbc:sqlite:./plugins/MyPlugin/mydatabase.db
+      username:
+      password:
+      platform: sqlite
+  ddl:
+    generate: true
+    run: true
