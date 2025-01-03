@@ -1,8 +1,6 @@
 package com.nayechan.combat.scoreboard;
 
-import com.j256.ormlite.dao.Dao;
 import com.nayechan.combat.AncyCombat;
-import com.nayechan.combat.model.CharacterData;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -13,7 +11,6 @@ import org.bukkit.scoreboard.*;
 
 import java.text.NumberFormat;
 import java.util.HashMap;
-import java.util.UUID;
 
 public class ScoreBoardData {
     private final Objective currentStatusObjective;

@@ -1,4 +1,4 @@
-package com.nayechan.combat.model;
+package com.nayechan.combat.models;
 
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.field.DatabaseField;

@@ -1,13 +1,9 @@
-package com.nayechan.combat.model;
+package com.nayechan.combat.models;
 
-import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
-import com.nayechan.combat.AncyCombat;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.security.cert.CertificateParsingException;
 
 @DatabaseTable(tableName = "character_stat")
 @Getter
@@ -75,7 +71,7 @@ public class CharacterStat {
     
     private double calculateMaxExp(long combatLevel)
     {
-        return Math.ceil(21 + (combatLevel * 4) + (Math.pow(combatLevel, 1.4) * 1.5));
+        return Math.ceil(15 + (combatLevel * 3) + (Math.pow(combatLevel, 1.4) * 0.8));
     }
     
     public long calculateMaxMana()

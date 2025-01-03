@@ -5,6 +5,7 @@ description: Ancy Combat Test
 author: nayechan
 website: https://nayechan.com
 api-version: '1.21'
+depend: [Oraxen]
 commands:
   reducemana:
     description: Test command to reduce mana
@@ -12,6 +13,9 @@ commands:
   addcombatlv:
     description: Test command to add level
     usage: /<command> <player> <amount>
+  reinforce:
+    description: Reinforce item (you should hold proper item)
+    usage: /<command> <amount>
   stat:
     description: Distribute stat
     usage: /<command> <stat_type> <amount>

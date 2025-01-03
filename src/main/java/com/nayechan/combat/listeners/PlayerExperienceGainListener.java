@@ -1,16 +1,14 @@
 package com.nayechan.combat.listeners;
 
-import com.j256.ormlite.dao.Dao;
 import com.nayechan.combat.AncyCombat;
-import com.nayechan.combat.model.CharacterData;
-import com.nayechan.combat.model.CharacterStat;
+import com.nayechan.combat.models.CharacterData;
+import com.nayechan.combat.models.CharacterStat;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerExpChangeEvent;
 
 import java.sql.SQLException;
-import java.util.UUID;
 
 public class PlayerExperienceGainListener implements Listener {
     private final AncyCombat plugin;

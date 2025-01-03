@@ -1,18 +1,14 @@
 package com.nayechan.combat.commands;
 
-import com.j256.ormlite.dao.Dao;
 import com.nayechan.combat.AncyCombat;
-import com.nayechan.combat.model.CharacterData;
-import com.nayechan.combat.model.CharacterStat;
-import com.nayechan.combat.utility.DatabaseManager;
+import com.nayechan.combat.models.CharacterData;
+import com.nayechan.combat.models.CharacterStat;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.UUID;
 
 public class AddCombatLvCommand implements CommandExecutor {
     @Override

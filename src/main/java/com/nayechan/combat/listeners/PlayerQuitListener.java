@@ -1,7 +1,7 @@
 package com.nayechan.combat.listeners;
 
 import com.nayechan.combat.AncyCombat;
-import com.nayechan.combat.model.CharacterData;
+import com.nayechan.combat.models.CharacterData;
 import com.nayechan.combat.utility.DatabaseManager;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

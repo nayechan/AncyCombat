@@ -6,7 +6,7 @@ import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import com.nayechan.combat.AncyCombat;
-import com.nayechan.combat.model.CharacterData;
+import com.nayechan.combat.models.CharacterData;
 import lombok.Getter;
 
 import java.io.File;
@@ -106,8 +106,6 @@ public class DatabaseManager {
     }
 
     public void saveDirtyCharacterData() {
-        System.out.println("Running async save task...");
-
         characterDataMap.values().forEach(characterData -> {
             if (characterData.IsDirty()) {
                 characterData.save();

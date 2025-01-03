@@ -2,22 +2,28 @@ package com.nayechan.combat;
 
 import com.nayechan.combat.commands.AddCombatLvCommand;
 import com.nayechan.combat.commands.ReduceManaCommand;
+import com.nayechan.combat.commands.ReinforceCommand;
 import com.nayechan.combat.commands.StatCommand;
 import com.nayechan.combat.listeners.*;
+import com.nayechan.combat.mechanics.ReinforceMechanicFactory;
+import com.nayechan.combat.mechanics.ReinforceMechanicManager;
 import com.nayechan.combat.scoreboard.ScoreBoardController;
 import com.nayechan.combat.utility.DatabaseManager;
+import io.th0rgal.oraxen.OraxenPlugin;
+import io.th0rgal.oraxen.api.OraxenItems;
+import io.th0rgal.oraxen.compatibilities.CompatibilitiesManager;
+import io.th0rgal.oraxen.mechanics.MechanicsManager;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
 
 import java.io.File;
-import java.lang.reflect.Array;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 public class AncyCombat extends JavaPlugin implements Listener {
     @Getter
@@ -36,7 +42,23 @@ public class AncyCombat extends JavaPlugin implements Listener {
         try {
             databaseManager = new DatabaseManager();      
             scoreBoardController = new ScoreBoardController();
-            scheduler = getServer().getScheduler();       
+            scheduler = getServer().getScheduler();
+
+            // Handle already connected players after a reload
+            getServer().getOnlinePlayers().forEach(player -> {
+                try {
+                    // Simulate the onPlayerJoin logic for each player
+                    DatabaseManager database = getDatabaseManager();
+
+                    UUID uuid = player.getUniqueId();
+                    database.getCharacterData(uuid);
+
+                    getScoreBoardController().initializeScoreboard(player);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    getServer().getPluginManager().disablePlugin(this);
+                }
+            });
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -48,10 +70,12 @@ public class AncyCombat extends JavaPlugin implements Listener {
             listeners = List.of(
                     new PlayerJoinListener(this),
                     new PlayerQuitListener(this),
-                    new PlayerDamageListener(this),
+                    new DamageListener(this),
+                    new DurabilityListener(this),
                     new PlayerExperienceGainListener(this),
                     new PlayerHealthListener(this),
-                    new PlayerRegenerateListener(this)
+                    new PlayerRegenerateListener(this),
+                    new OraxenItemListener(this)
             );
         } catch (SQLException e) {
             e.printStackTrace();
@@ -68,6 +92,7 @@ public class AncyCombat extends JavaPlugin implements Listener {
         try {
             getCommand("addcombatlv").setExecutor(new AddCombatLvCommand());
             getCommand("reducemana").setExecutor(new ReduceManaCommand());
+            getCommand("reinforce").setExecutor(new ReinforceCommand());
             getCommand("stat").setExecutor(new StatCommand());
         }
         catch (Exception e) {
@@ -81,6 +106,10 @@ public class AncyCombat extends JavaPlugin implements Listener {
         try {
             databaseManager.saveDirtyCharacterData();
             databaseManager.close();
+            
+            getServer().getOnlinePlayers().forEach(player -> {
+                player.setScoreboard(getServer().getScoreboardManager().getNewScoreboard());
+            });
         } 
         catch (Exception e) {
             e.printStackTrace();
