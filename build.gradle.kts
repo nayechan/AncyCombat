@@ -55,6 +55,11 @@ java {
     }
 }
 
+
+tasks.withType<JavaCompile> {
+    options.encoding = "UTF-8"
+}
+
 tasks.withType<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar> {
     archiveClassifier.set("")
     relocate("com.j256.ormlite", "com.nayechan.combat.shaded.ormlite")

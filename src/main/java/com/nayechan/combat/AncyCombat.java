@@ -4,19 +4,14 @@ import com.nayechan.combat.commands.AddCombatLvCommand;
 import com.nayechan.combat.commands.ReduceManaCommand;
 import com.nayechan.combat.commands.ReinforceCommand;
 import com.nayechan.combat.commands.StatCommand;
+import com.nayechan.combat.gui.ReinforceGUIListener;
 import com.nayechan.combat.listeners.*;
-import com.nayechan.combat.mechanics.ReinforceMechanicFactory;
-import com.nayechan.combat.mechanics.ReinforceMechanicManager;
 import com.nayechan.combat.scoreboard.ScoreBoardController;
 import com.nayechan.combat.utility.DatabaseManager;
-import io.th0rgal.oraxen.OraxenPlugin;
-import io.th0rgal.oraxen.api.OraxenItems;
-import io.th0rgal.oraxen.compatibilities.CompatibilitiesManager;
-import io.th0rgal.oraxen.mechanics.MechanicsManager;
 import lombok.Getter;
 import org.bukkit.Bukkit;
+import org.bukkit.event.Event;
 import org.bukkit.event.Listener;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
 
@@ -66,6 +61,7 @@ public class AncyCombat extends JavaPlugin implements Listener {
         }
 
         List<Listener> listeners = null;
+        List<Event> events = null;
         try {
             listeners = List.of(
                     new PlayerJoinListener(this),
@@ -75,7 +71,9 @@ public class AncyCombat extends JavaPlugin implements Listener {
                     new PlayerExperienceGainListener(this),
                     new PlayerHealthListener(this),
                     new PlayerRegenerateListener(this),
-                    new OraxenItemListener(this)
+                    new OraxenItemListener(this),
+                    
+                    new ReinforceGUIListener(this)
             );
         } catch (SQLException e) {
             e.printStackTrace();

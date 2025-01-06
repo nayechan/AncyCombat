@@ -1,15 +1,22 @@
 package com.nayechan.combat.listeners;
 
 import com.nayechan.combat.AncyCombat;
+import com.nayechan.combat.mechanics.rangedweapon.RangedWeaponMechanic;
+import com.nayechan.combat.mechanics.rangedweapon.RangedWeaponMechanicFactory;
+import com.nayechan.combat.mechanics.reinforce.ReinforceMechanic;
+import com.nayechan.combat.mechanics.reinforce.ReinforceMechanicFactory;
 import com.nayechan.combat.models.CharacterData;
 import com.nayechan.combat.models.CharacterStat;
 import com.nayechan.combat.scoreboard.ScoreBoardController;
+import io.th0rgal.oraxen.mechanics.MechanicFactory;
+import io.th0rgal.oraxen.mechanics.MechanicsManager;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.projectiles.ProjectileSource;
 
 import java.util.UUID;
@@ -48,6 +55,24 @@ public class DamageListener implements Listener {
                     CharacterData characterData = plugin.getDatabaseManager().getCharacterData(playerId);
                     if (characterData != null) {
                         damage *= 1 + (characterData.getStat().getStatAtk() / 10.0);
+                    }
+
+                    RangedWeaponMechanicFactory rangedWeaponMechanicFactory =
+                            (RangedWeaponMechanicFactory) MechanicsManager.getMechanicFactory("ranged_weapon");
+
+                    ReinforceMechanicFactory reinforceMechanicFactory =
+                            (ReinforceMechanicFactory) MechanicsManager.getMechanicFactory("reinforce");
+                    
+                    if(rangedWeaponMechanicFactory != null && reinforceMechanicFactory != null) {
+                        ItemStack mainhandItem = player.getInventory().getItemInMainHand();
+                        RangedWeaponMechanic rangedWeaponMechanic = 
+                                rangedWeaponMechanicFactory.getMechanic(mainhandItem);
+                        
+                        if(rangedWeaponMechanic != null) {
+                            double power = rangedWeaponMechanic.getPower(mainhandItem);
+                            damage *= power;                            
+                        }
+                        
                     }
                 }
             }

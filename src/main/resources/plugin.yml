@@ -14,8 +14,8 @@ commands:
     description: Test command to add level
     usage: /<command> <player> <amount>
   reinforce:
-    description: Reinforce item (you should hold proper item)
-    usage: /<command> <amount>
+    description: Reinforce item
+    usage: /<command>
   stat:
     description: Distribute stat
     usage: /<command> <stat_type> <amount>

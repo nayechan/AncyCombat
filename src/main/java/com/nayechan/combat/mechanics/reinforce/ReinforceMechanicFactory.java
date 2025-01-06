@@ -1,22 +1,21 @@
-package com.nayechan.combat.mechanics;
+package com.nayechan.combat.mechanics.reinforce;
 
 import com.nayechan.combat.AncyCombat;
-import io.th0rgal.oraxen.OraxenPlugin;
 import io.th0rgal.oraxen.mechanics.Mechanic;
 import io.th0rgal.oraxen.mechanics.MechanicFactory;
 import io.th0rgal.oraxen.mechanics.MechanicsManager;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.java.JavaPlugin;
 
 public class ReinforceMechanicFactory extends MechanicFactory {
     public ReinforceMechanicFactory(String mechanicId) {
         super(mechanicId);
         MechanicsManager.registerListeners(
-                OraxenPlugin.get(),
+                AncyCombat.getInstance(),
                 mechanicId,
                 new ReinforceMechanicManager(this)
         );
+        
     }
 
     @Override

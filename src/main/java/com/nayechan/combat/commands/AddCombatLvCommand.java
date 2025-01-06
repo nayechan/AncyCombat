@@ -4,6 +4,7 @@ import com.nayechan.combat.AncyCombat;
 import com.nayechan.combat.models.CharacterData;
 import com.nayechan.combat.models.CharacterStat;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -17,13 +18,13 @@ public class AddCombatLvCommand implements CommandExecutor {
     ) {
         // Check if the sender is a player
         if (!(sender instanceof Player)) {
-            sender.sendMessage("This command can only be executed by players.");
+            sender.sendMessage(ChatColor.RED+"플레이어만 이 명령어를 사용할 수 있습니다.");
             return false;
         }
 
         // Ensure the correct number of arguments
         if (args.length != 2) {
-            sender.sendMessage("Usage: /addcombatlv <player> <amount>");
+            sender.sendMessage(ChatColor.RED+"명령어 사용법: /addcombatlv <player> <amount>");
             return false;
         }
 
@@ -32,7 +33,7 @@ public class AddCombatLvCommand implements CommandExecutor {
         Player targetPlayer = Bukkit.getPlayer(playerName);
 
         if (targetPlayer == null) {
-            sender.sendMessage("Player not found.");
+            sender.sendMessage(ChatColor.RED+"해당 플레이어를 찾을 수 없습니다.");
             return false;
         }
 
@@ -41,7 +42,7 @@ public class AddCombatLvCommand implements CommandExecutor {
         try {
             levelsToAdd = Integer.parseInt(args[1]);
         } catch (NumberFormatException e) {
-            sender.sendMessage("Level amount must be a number.");
+            sender.sendMessage(ChatColor.RED+"잘못된 숫자 형식입니다.");
             return false;
         }
 
@@ -51,14 +52,14 @@ public class AddCombatLvCommand implements CommandExecutor {
             CharacterData characterData = databaseManager.getCharacterData(targetPlayer.getUniqueId());
             
             if (characterData == null) {
-                sender.sendMessage("No character data found for " + targetPlayer.getName());
+                sender.sendMessage(ChatColor.RED+"다음 플레이어의 데이터가 존재하지 않습니다 : " + targetPlayer.getName());
                 return false;
             }
 
             // Retrieve the CharacterStat
             CharacterStat stat = characterData.getStat();
             if (stat == null) {
-                sender.sendMessage("Character stat is missing.");
+                sender.sendMessage(ChatColor.RED+"플레이어의 스탯이 존재하지 않습니다.");
                 return false;
             }
 
@@ -72,9 +73,9 @@ public class AddCombatLvCommand implements CommandExecutor {
             databaseManager.updateCharacterData(characterData);
 
             // Notify success
-            sender.sendMessage("Updated stats for " + targetPlayer.getName());
+            sender.sendMessage(ChatColor.GREEN+"다음 플레이어에 대한 스탯을 업데이트 했습니다 : " + targetPlayer.getName());
         } catch (Exception e) {
-            sender.sendMessage("An error occurred: " + e.getMessage());
+            sender.sendMessage(ChatColor.RED+"오류가 발생했습니다 : " + e.getMessage());
             return false;
         }
 
