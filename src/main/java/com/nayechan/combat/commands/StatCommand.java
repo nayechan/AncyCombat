@@ -3,6 +3,7 @@ package com.nayechan.combat.commands;
 import com.nayechan.combat.AncyCombat;
 import com.nayechan.combat.models.CharacterData;
 import com.nayechan.combat.models.CharacterStat;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -52,9 +53,14 @@ public class StatCommand implements CommandExecutor {
 
         CharacterStat characterStat = characterData.getStat();
         long availableAp = characterStat.getAp();
+        
+        if (amount < 0) {
+            player.sendMessage(ChatColor.RED + "잘못된 스탯 양입니다." + availableAp);
+            return false;
+        }
 
         if (amount > availableAp) {
-            player.sendMessage("You do not have enough AP. Available AP: " + availableAp);
+            player.sendMessage(ChatColor.RED + "충분한 AP가 없습니다. 현재 AP : " + availableAp);
             return false;
         }
 
