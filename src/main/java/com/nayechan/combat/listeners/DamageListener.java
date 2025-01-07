@@ -10,6 +10,7 @@ import com.nayechan.combat.models.CharacterStat;
 import com.nayechan.combat.scoreboard.ScoreBoardController;
 import io.th0rgal.oraxen.mechanics.MechanicFactory;
 import io.th0rgal.oraxen.mechanics.MechanicsManager;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -23,6 +24,7 @@ import java.util.UUID;
 import java.util.logging.Level;
 
 public class DamageListener implements Listener {
+    private static final double BOW_MAX_DAMAGE = 1000000000;
     private final AncyCombat plugin;
     private final ScoreBoardController scoreBoardController;
 
@@ -79,6 +81,10 @@ public class DamageListener implements Listener {
         } catch (Exception e) {
             plugin.getLogger().log(Level.WARNING, "Failed to handle arrow damage: ", e);
         }
+
+        if(damage > BOW_MAX_DAMAGE)
+            damage = BOW_MAX_DAMAGE;
+        
         return damage;
     }
 
