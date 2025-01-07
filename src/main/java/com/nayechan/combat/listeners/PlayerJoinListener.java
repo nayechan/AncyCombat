@@ -18,6 +18,11 @@ public class PlayerJoinListener implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         try {
             Player player = event.getPlayer(); // Get the player from the event
+            
+            if(!AncyCombat.getEcon().hasAccount(player.getUniqueId())) {
+                AncyCombat.getEcon().createAccount(player.getUniqueId(), player.getName(), true);
+            }
+            
             DatabaseManager database = plugin.getDatabaseManager();
 
             final var uuid = player.getUniqueId();

@@ -9,9 +9,11 @@ import com.nayechan.combat.listeners.*;
 import com.nayechan.combat.scoreboard.ScoreBoardController;
 import com.nayechan.combat.utility.DatabaseManager;
 import lombok.Getter;
+import net.milkbowl.vault2.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
 import org.bukkit.event.Listener;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
 
@@ -24,16 +26,21 @@ public class AncyCombat extends JavaPlugin implements Listener {
     @Getter
     private static AncyCombat instance;
     @Getter
+    private static Economy econ = null;
+    @Getter
     private ScoreBoardController scoreBoardController;
     @Getter
     private DatabaseManager databaseManager;
     @Getter
     private BukkitScheduler scheduler;
     
+    private final static String PLUGIN_NAME = "AncyCombat";
+    
     @Override
     public void onEnable() {
         instance = this;
 
+        // Initialize DB and Scoreboard
         try {
             databaseManager = new DatabaseManager();      
             scoreBoardController = new ScoreBoardController();
@@ -59,7 +66,14 @@ public class AncyCombat extends JavaPlugin implements Listener {
             e.printStackTrace();
             getServer().getPluginManager().disablePlugin(this);
         }
-
+        
+        // Register External API
+        if (!setupEconomy()) {
+            getLogger().severe("Disabled due to no Vault dependency found!");
+            getServer().getPluginManager().disablePlugin(this);
+        }
+        
+        // Register Listeners
         List<Listener> listeners = null;
         List<Event> events = null;
         try {
@@ -117,9 +131,25 @@ public class AncyCombat extends JavaPlugin implements Listener {
         }
     }
 
+    private boolean setupEconomy() {
+        if (getServer().getPluginManager().getPlugin("Vault") == null) {
+            return false;
+        }
+        RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
+        if (rsp == null) {
+            return false;
+        }
+        econ = rsp.getProvider();
+        return econ != null;
+    }
+
     public File getFile(String childFile) {
         File dataFolder = getDataFolder();
         if (!dataFolder.exists()) dataFolder.mkdir();
         return new File(dataFolder, childFile);
+    }
+    
+    public static String getPluginName(){
+        return PLUGIN_NAME;
     }
 }

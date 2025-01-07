@@ -13,6 +13,7 @@ repositories {
     mavenCentral()
     maven("https://repo.papermc.io/repository/maven-public/")
     maven("https://repo.oraxen.com/releases")
+    maven("https://repo.codemc.org/repository/maven-public")
 }
 
 dependencies {
@@ -44,6 +45,7 @@ dependencies {
     testAnnotationProcessor("org.projectlombok:lombok:1.18.34")
 
     compileOnly("io.papermc.paper:paper-api:1.21-R0.1-SNAPSHOT")
+    compileOnly("net.milkbowl.vault:VaultUnlockedAPI:2.9")
 }
 tasks.test {
     useJUnitPlatform()

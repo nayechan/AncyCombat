@@ -3,10 +3,12 @@ package com.nayechan.combat.gui;
 import com.nayechan.combat.AncyCombat;
 import com.nayechan.combat.mechanics.reinforce.ReinforceMechanic;
 import com.nayechan.combat.mechanics.reinforce.ReinforceMechanicFactory;
+import com.nayechan.combat.utility.EconomyUtility;
 import io.th0rgal.oraxen.mechanics.MechanicsManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.block.Vault;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -16,6 +18,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -87,22 +90,32 @@ public class ReinforceGUIListener implements Listener {
                 ReinforceMechanic mechanic = reinforceMechanicFactory.getMechanic(item);
                 if(mechanic != null) {
                     int currentLevel = mechanic.getItemReinforceAmount(item);
-                    double roll = Math.random();
-                    if(currentLevel >= mechanic.getItemMaxReinforceAmount()) {
-                        player.sendMessage(ChatColor.WHITE + "이미 최대치까지 강화된 아이템입니다.");
-                    }
-                    else if(roll < calculateSuccessChance(currentLevel)) {
-                        mechanic.setItemReinforceAmount(player, item, currentLevel+1);
-                        player.sendMessage(ChatColor.GREEN + "강화 성공! +"+(currentLevel+1));
-                    }
-                    else if(roll >= 1-calculateDestroyChance(currentLevel)) {
-                        clickedInventory.setItem(13, new ItemStack(Material.AIR));
-                        player.sendMessage(ChatColor.DARK_GRAY + "아이템이 파괴됨...");
-                    }
-                    else {
-                        player.sendMessage(ChatColor.RED + "강화 실패...");
+                    
+                    BigDecimal currentMoney = EconomyUtility.getBalance(player);
+                    BigDecimal requiredMoney = BigDecimal.valueOf(calculateRequiredGold(currentLevel));
+                    if(currentMoney.compareTo(requiredMoney) < 0) {
+                        player.sendMessage(ChatColor.RED + "강화에 필요한 금액이 부족합니다.");
                     }
                     
+                    else {
+                        EconomyUtility.withdraw(player, requiredMoney);
+
+                        double roll = Math.random();
+                        if(currentLevel >= mechanic.getItemMaxReinforceAmount()) {
+                            player.sendMessage(ChatColor.WHITE + "이미 최대치까지 강화된 아이템입니다.");
+                        }
+                        else if(roll < calculateSuccessChance(currentLevel)) {
+                            mechanic.setItemReinforceAmount(player, item, currentLevel+1);
+                            player.sendMessage(ChatColor.GREEN + "강화 성공! +"+(currentLevel+1));
+                        }
+                        else if(roll >= 1-calculateDestroyChance(currentLevel)) {
+                            clickedInventory.setItem(13, new ItemStack(Material.AIR));
+                            player.sendMessage(ChatColor.DARK_GRAY + "아이템이 파괴됨...");
+                        }
+                        else {
+                            player.sendMessage(ChatColor.RED + "강화 실패...");
+                        }
+                    }                    
                 }
             }
 

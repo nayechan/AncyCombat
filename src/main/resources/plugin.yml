@@ -5,7 +5,7 @@ description: Ancy Combat Test
 author: nayechan
 website: https://nayechan.com
 api-version: '1.21'
-depend: [Oraxen]
+depend: [Oraxen, Vault]
 commands:
   reducemana:
     description: Test command to reduce mana
